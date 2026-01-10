@@ -1,0 +1,10 @@
+[project]
+name = "dune-dashboard-creator"
+version = "0.1.0"
+description = "Automatically create and manage Dune Analytics queries and dashboards using Python"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "dune-client>=1.10.0",
+    "python-dotenv>=1.2.1",
+]
