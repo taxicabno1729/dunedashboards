@@ -22,6 +22,23 @@ Dashboards with insights into crypto trading:
 - A Dune Analytics account
 - Dune API key (get it from [https://dune.com/settings/api](https://dune.com/settings/api))
 
+## Important: API Plan Requirements
+
+**Query Creation** (create_query, update_query) requires:
+- **Dune Plus plan or higher**
+- Free tier API keys will receive a 403 Forbidden error when attempting to create/update queries
+
+**Query Execution** (execute_query, get_query_result) works with:
+- **All API tiers including free**
+- You can execute and retrieve results from existing public queries
+
+If you have a free tier API key, you can still use this tool to:
+- Execute existing queries
+- Fetch query results
+- Integrate Dune data into your applications
+
+To create queries programmatically, visit [https://dune.com/pricing](https://dune.com/pricing) to upgrade to Plus.
+
 ## Setup
 
 1. Clone this repository:
@@ -49,18 +66,42 @@ DUNE_API_KEY=your_api_key_here
 
 ### Running the Example
 
-The repository includes example queries that demonstrate creating queries for a dashboard:
+The repository includes examples for both creating and executing queries:
 
 ```bash
 uv run main.py
 ```
 
 This will:
-1. Create example queries on Dune Analytics
-2. Print the query IDs and URLs
-3. Provide instructions for adding them to a dashboard
+1. Attempt to create example queries (Plus plan required - will show helpful error if unavailable)
+2. Demonstrate executing existing queries (works with free tier)
+3. Show instructions for using your own query IDs
 
-### Creating Custom Queries
+### Working with Existing Queries (Free Tier Compatible)
+
+You can execute and retrieve results from any public Dune query:
+
+```python
+from main import DuneDashboardCreator
+
+creator = DuneDashboardCreator()
+
+# Get results from an existing query
+query_id = 123456  # Replace with your query ID
+results = creator.get_query_result(query_id)
+
+# Or execute a query (re-run it)
+results = creator.execute_query(query_id)
+```
+
+To find query IDs:
+1. Open any Dune dashboard
+2. Click on a visualization
+3. The query ID is in the URL: `https://dune.com/queries/<ID>`
+
+### Creating Custom Queries (Plus Plan Required)
+
+**Note:** Creating queries programmatically requires a Dune Plus plan or higher.
 
 You can use the `DuneDashboardCreator` class to create your own queries:
 
