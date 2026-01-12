@@ -12,7 +12,10 @@ Dashboards with insights into crypto trading:
 
 - Create Dune Analytics queries programmatically using Python
 - Update and manage existing queries
-- Execute queries and retrieve results
+- Execute queries and retrieve results as pandas DataFrames
+- Display results in clean, formatted tables
+- Export query results to CSV files
+- Interactive CLI with user-friendly prompts
 - Built with the official `dune-client` library
 - Easy setup with `uv` package manager
 
@@ -95,7 +98,23 @@ Enter query IDs (comma-separated, e.g., 123456,789012): 6499277
 Fetching latest results for query 6499277...
 ✓ Results fetched successfully
    ✓ Retrieved 6 rows
-   Sample data: [{'field1': 'value1', ...}, ...]
+
+   Data Preview (first 10 rows):
+--------------------------------------------------------------------------------
+ brier_score  cumulative_avg_brier_score        day                 market  outcome predicted_probability
+      0.2025                    0.098050 2025-01-10  Fed Rate Hike Q1 2025        0                  0.45
+      0.0625                    0.098050 2025-01-10   Will BTC reach $100k        1                  0.75
+      0.0324                    0.080825 2025-01-09         S&P 500 > 6000        1                  0.82
+      0.0784                    0.080825 2025-01-09   Will BTC reach $100k        1                  0.72
+      0.1225                    0.106250 2025-01-08 Crypto Regulation Pass        0                  0.35
+      0.0900                    0.106250 2025-01-08   Will BTC reach $100k        1                  0.70
+--------------------------------------------------------------------------------
+
+   Shape: 6 rows × 6 columns
+   Columns: brier_score, cumulative_avg_brier_score, day, market, outcome, predicted_probability
+
+   Save to CSV? (y/n): y
+   ✓ Saved to query_6499277_results.csv
 ```
 
 ### Working with Existing Queries (Free Tier Compatible)
@@ -104,12 +123,24 @@ You can execute and retrieve results from any public Dune query:
 
 ```python
 from main import DuneDashboardCreator
+import pandas as pd
 
 creator = DuneDashboardCreator()
 
 # Get results from an existing query
 query_id = 123456  # Replace with your query ID
 results = creator.get_query_result(query_id)
+
+# Convert to pandas DataFrame
+rows = results.get_rows()
+df = pd.DataFrame(rows)
+
+# Now you can work with the DataFrame
+print(df.head())
+print(f"Shape: {df.shape}")
+
+# Export to CSV
+df.to_csv(f"query_{query_id}_results.csv", index=False)
 
 # Or execute a query (re-run it)
 results = creator.execute_query(query_id)
