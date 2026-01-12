@@ -175,7 +175,7 @@ def demo_existing_queries(query_ids: Optional[List[int]] = None):
                 rows = results.get_rows()
                 print(f"   ✓ Retrieved {len(rows)} rows")
                 if rows and len(rows) > 0:
-                    print(f"   Sample data: {rows[0]}")
+                    print(f"   Sample data: {rows[0:5]}")
             else:
                 print(f"   ✓ Results retrieved successfully")
 
@@ -271,14 +271,55 @@ def main():
     print("\n📖 Choose an option:")
     print("   1. Create new queries (requires Plus plan)")
     print("   2. Execute existing queries (works with free tier)")
+    print("   3. Exit")
     print()
 
-    # Try to create queries (will show helpful error if user doesn't have Plus)
-    create_example_queries()
+    try:
+        choice = input("Enter your choice (1-3): ").strip()
+    except (EOFError, KeyboardInterrupt):
+        print("\nExiting...")
+        return
 
-    # Show free tier alternative
-    print("\n" + "="*60)
-    demo_existing_queries()
+    if choice == "1":
+        # Try to create queries (will show helpful error if user doesn't have Plus)
+        create_example_queries()
+
+    elif choice == "2":
+        print("\n" + "="*60)
+        print("Execute Existing Queries")
+        print("="*60)
+        print("\nTo find query IDs:")
+        print("- Open any Dune dashboard")
+        print("- Click on a visualization")
+        print("- Copy the ID from the URL: https://dune.com/queries/<ID>")
+        print()
+
+        try:
+            query_input = input("Enter query IDs (comma-separated, e.g., 123456,789012): ").strip()
+
+            if not query_input:
+                print("\n❌ No query IDs provided")
+                demo_existing_queries()
+                return
+
+            # Parse comma-separated query IDs
+            try:
+                query_ids = [int(qid.strip()) for qid in query_input.split(",")]
+                demo_existing_queries(query_ids)
+            except ValueError:
+                print("\n❌ Error: Please enter valid numeric query IDs")
+                print("Example: 123456,789012")
+
+        except (EOFError, KeyboardInterrupt):
+            print("\nCancelled...")
+            return
+
+    elif choice == "3":
+        print("\nGoodbye!")
+        return
+
+    else:
+        print("\n❌ Invalid choice. Please run again and select 1, 2, or 3.")
 
 
 if __name__ == "__main__":
