@@ -64,18 +64,39 @@ DUNE_API_KEY=your_api_key_here
 
 ## Usage
 
-### Running the Example
+### Running the Interactive Tool
 
-The repository includes examples for both creating and executing queries:
+The repository includes an interactive CLI tool:
 
 ```bash
 uv run main.py
 ```
 
-This will:
-1. Attempt to create example queries (Plus plan required - will show helpful error if unavailable)
-2. Demonstrate executing existing queries (works with free tier)
-3. Show instructions for using your own query IDs
+You'll see an interactive menu with three options:
+1. **Create new queries** (requires Plus plan) - Creates example queries for a dashboard
+2. **Execute existing queries** (works with free tier) - Fetches results from your existing queries
+3. **Exit** - Quit the program
+
+#### Option 2: Execute Existing Queries
+
+When you select option 2, you'll be prompted to enter query IDs:
+- Enter one or more query IDs separated by commas (e.g., `123456,789012`)
+- The tool will fetch and display results for each query
+- Works with any public query or your own private queries
+
+**Example session:**
+```
+Enter your choice (1-3): 2
+
+Enter query IDs (comma-separated, e.g., 123456,789012): 6499277
+
+📊 Query 6499277:
+   URL: https://dune.com/queries/6499277
+Fetching latest results for query 6499277...
+✓ Results fetched successfully
+   ✓ Retrieved 6 rows
+   Sample data: [{'field1': 'value1', ...}, ...]
+```
 
 ### Working with Existing Queries (Free Tier Compatible)
 
