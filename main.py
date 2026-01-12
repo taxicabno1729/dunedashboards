@@ -6,6 +6,7 @@ from typing import List, Optional
 from dotenv import load_dotenv
 from dune_client.client import DuneClient
 from dune_client.types import QueryParameter
+import pandas as pd
 
 load_dotenv()
 
@@ -174,8 +175,36 @@ def demo_existing_queries(query_ids: Optional[List[int]] = None):
             if hasattr(results, 'get_rows'):
                 rows = results.get_rows()
                 print(f"   ✓ Retrieved {len(rows)} rows")
+
                 if rows and len(rows) > 0:
-                    print(f"   Sample data: {rows[0:5]}")
+                    # Convert to DataFrame for better display
+                    df = pd.DataFrame(rows)
+                    print(f"\n   Data Preview (first 10 rows):")
+                    print("-" * 80)
+                    # Display with nice formatting
+                    pd.set_option('display.max_columns', None)
+                    pd.set_option('display.width', None)
+                    pd.set_option('display.max_colwidth', 50)
+
+                    # Show first 10 rows
+                    print(df.head(10).to_string(index=False))
+                    print("-" * 80)
+
+                    # Show shape
+                    print(f"\n   Shape: {df.shape[0]} rows × {df.shape[1]} columns")
+                    print(f"   Columns: {', '.join(df.columns)}")
+
+                    # Offer to save to CSV
+                    try:
+                        save = input(f"\n   Save to CSV? (y/n): ").strip().lower()
+                        if save == 'y':
+                            filename = f"query_{query_id}_results.csv"
+                            df.to_csv(filename, index=False)
+                            print(f"   ✓ Saved to {filename}")
+                    except (EOFError, KeyboardInterrupt):
+                        print()  # Just move to next line
+                else:
+                    print(f"   ✓ No data rows returned")
             else:
                 print(f"   ✓ Results retrieved successfully")
 

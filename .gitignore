@@ -43,3 +43,7 @@ Thumbs.db
 # uv
 .uv/
 uv.lock
+
+# Generated query results
+query_*_results.csv
+*.csv
